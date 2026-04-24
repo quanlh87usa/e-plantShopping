@@ -38,6 +38,10 @@
   margin-bottom: 15px;
 }
 
+.btn-disabled {
+    opacity: 0.5; /* Reduce opacity to visually indicate disabled state */
+    cursor: not-allowed; /* Change cursor to indicate that the button is not clickable */
+  }
 .cart-item-button {
   background-color: #f0f0f0;
   border: 1px solid lightgrey;
