@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import './ProductList.css'
 import CartItem from './CartItem';
 import { addItem } from './CartSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 function ProductList({ onHomeClick }) {
     const dispatch = useDispatch();
-    const [quantityOfCart, setQuantityOfCart] = useState(0);
+    const cart = useSelector(state => state.cart.items);
     const [addedToCart, setAddedToCart] = useState({});
+    const [totalQuantity, setTotalQuantity] = useState(0);
     const [showCart, setShowCart] = useState(false);
     const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
 
@@ -238,8 +239,18 @@ function ProductList({ onHomeClick }) {
         fontSize: '30px',
         textDecoration: 'none',
     }
+    useEffect (() => {
+        let totalQuantity = 0;
+        cart.forEach((product) => {
+            totalQuantity += product.quantity});
+        if(totalQuantity > 0) {
+            setTotalQuantity(totalQuantity);
+        }
+        
+    }, [cart]);
 
     const handleAddToCart = (product) => {
+        console.log(cart);
         dispatch(addItem(product)); // Dispatch the action to add the product to the cart (Redux action)
       
         setAddedToCart((prevState) => ({ // Update the local state to reflect that the product has been added
@@ -248,13 +259,6 @@ function ProductList({ onHomeClick }) {
         }));
       };
       
-    /*const countQuanlityOfCart(products) {
-        let number = 0;
-        products.forEach(element => {
-            number = element.quantity;
-            setQuantityOfCart(element);
-        });
-    };*/
     const handleHomeClick = (e) => {
         e.preventDefault();
         onHomeClick();
@@ -272,8 +276,8 @@ function ProductList({ onHomeClick }) {
 
     const handleContinueShopping = (e) => {
         e.preventDefault();
-        setShowPlants(true);
         setShowCart(false);
+        setShowPlants(true);
     };
     return (
         <div>
@@ -306,7 +310,9 @@ function ProductList({ onHomeClick }) {
                                         id="mainIconPathAttribute">
                                     </path>
                                 </svg>
+                                <circle className='cart_quantity_count' cx="184" cy="100" r="60">{totalQuantity}</circle>
                             </h1>
+                            
                         </a>
                     </div>
                 </div>
